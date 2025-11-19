@@ -1,365 +1,491 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+/* -----------------------------------------
+   1. CORE SETTINGS & VARIABLES
+   ----------------------------------------- */
+/* Inter for main text, JetBrains Mono for code elements */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap');
 
 :root {
-  --color-body: #c9d1d9;
-  --color-heading: #f8f9fa;
-  --color-base: #111827;        /* Deep slate */
-  --color-base2: #0a0e17;       /* Background tone */
-  --color-brand: #57068c;       /* NYU violet */
-  --color-brand2: #32174d;      /* Deep violet accent */
-  --sidebar-width: 240px;
-  --font-base: "Sora", sans-serif;
+  /* The "Dark Glass" Palette */
+  --bg-deep: #050505;        /* Almost black */
+  --bg-card: rgba(255, 255, 255, 0.03); /* Glass effect */
+  --border-glass: rgba(255, 255, 255, 0.08);
+  
+  --text-main: #e0e0e0;
+  --text-muted: #9ca3af;
+  
+  --accent-glow: #57068c;    /* NYU Violet */
+  --accent-cyan: #00f2ff;    /* Cyber Cyan for highlights */
+  
+  --sidebar-width: 260px;
+  
+  --font-main: 'Inter', sans-serif;
+  --font-code: 'JetBrains Mono', monospace; /* The "Developer" font */
 }
 
-/* BODY */
+/* GLOBAL RESET */
+* { box-sizing: border-box; }
+
 body {
-  background-color: var(--color-base2);
-  color: var(--color-body);
-  font-family: var(--font-base);
-  line-height: 1.7;
-  font-weight: 400;
-}
-
-h1.display-4 {
-  font-style: italic;
-  font-weight: 500;
-  letter-spacing: 0.6px;
-  text-transform: none;
-}
-
-/* IMAGE EFFECT */
-.card .img {
-  overflow: hidden;
-}
-.card .img img {
-  transition: all 0.5s ease;
-}
-.card:hover .img img {
-  transform: scale(1.05);
-}
-
-/* HEADINGS */
-h1, h2, h3, h4, h5{
-  color: var(--color-heading);
-  font-weight: 500;
-  letter-spacing: 0.4px;
-  text-transform: none; /* No block caps */
-}
-
-h6 {
-  color: var(--color-heading);
-  font-weight: 500;
-  font-style: italic;
-  letter-spacing: 0.4px;
-  text-transform: none; /* No block caps */
-}
-
-/* LINKS */
-a {
-  text-decoration: none;
-  color: var(--color-body);
-  transition: all 0.4s ease;
-}
-a:hover {
-  color: var(--color-brand);
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  font-family: var(--font-main);
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-bottom: 60px; /* Space for fixed footer */
+  cursor: auto !important; /* Ensure standard cursor */
 }
 
 img {
-  width: 100%;
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
 }
 
-/* NAVBAR */
-.navbar .nav-link {
-  font-weight: 600 !important;
-  text-transform: none; /* keep lowercase titles */
-  color: white;
-}
-.navbar .nav-link:hover,
-.navbar .nav-link.active {
-  color: var(--color-brand);
+/* Background Ambient Glow (The Aurora Effect) */
+body::before {
+  content: "";
+  position: fixed;
+  top: -20%;
+  left: -10%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(87,6,140,0.15), transparent 70%);
+  z-index: -1;
+  animation: float 10s infinite alternate ease-in-out;
 }
 
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+/* TYPOGRAPHY */
+h1, h2, h3, h4, h5 {
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* Use the code font for subtitles to look technical */
+h6, .nav-link, .date-badge, .tech-tag {
+  font-family: var(--font-code);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+}
+
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+/* -----------------------------------------
+   2. NAVIGATION (The Glass Sidebar)
+   ----------------------------------------- */
 .navbar {
-  background-color: var(--color-base);
+  background: rgba(5, 5, 5, 0.8);
+  backdrop-filter: blur(15px); /* Blurs what's behind it */
+  border-right: 1px solid var(--border-glass);
+  padding: 2rem 1rem;
 }
 
-.lead {
-  font-style: bold;
-  color: #d2d9e0;
+.navbar-brand img {
+  border: 2px solid var(--accent-glow);
+  padding: 4px;
+  border-radius: 50%;
+  transition: 0.5s;
 }
 
+.navbar-brand:hover img {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+}
 
+.nav-link {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin: 8px 0;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+  transform: translateX(5px);
+}
+
+/* DESKTOP LAYOUT */
 @media (min-width: 992px) {
   .navbar {
-    min-height: 100vh !important;
-    max-width: var(--sidebar-width) !important;
-    background: linear-gradient(rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0.95));
-    background-size: cover;
-    background-position: center;
+    height: 100vh;
+    width: var(--sidebar-width);
+    position: fixed;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
-
-  .navbar-brand img {
-    border: 4px solid var(--color-brand);
-  }
-
   #content-wrapper {
     margin-left: var(--sidebar-width);
+    padding: 0 4rem; /* More breathing room */
   }
 }
 
-/* SECTIONS */
-.full-hight {
+@media (max-width: 991px) {
+  .navbar { border-bottom: 1px solid var(--border-glass); }
+  #content-wrapper { padding: 100px 1.5rem 4rem 1.5rem; }
+}
+
+/* -----------------------------------------
+   3. SECTIONS & LAYOUT
+   ----------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory; /* Forces snapping */
+}
+
+section {
+  scroll-snap-align: start;      /* Snaps top of section to top of screen */
+  scroll-margin-top: 0;          /* Ensures no offset issues */
+  min-height: 100vh;             /* Forces full height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;       /* Centers content vertically */
+  padding-top: 80px;             /* Compensate for mobile navbar */
+  padding-bottom: 80px;
+}
+
+.full-height {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: 80px;
-  padding-bottom: 80px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  padding: 4rem 0;
 }
 
+/* Hero Typography */
+.eyebrow {
+  color: var(--accent-cyan); /* Pop of cyan */
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  line-height: 1.1;
+  background: linear-gradient(to right, #fff, #a5b4fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+/* -----------------------------------------
+   4. CARDS & COMPONENTS (The UI Look)
+   ----------------------------------------- */
+/* Base Card Style */
 .bg-base {
-  background-color: var(--color-base);
-}
-
-/* CARD HOVER EFFECT */
-.shadow-effect {
-  transition: all 0.5s ease;
-}
-.shadow-effect:hover {
-  box-shadow: -6px 6px 0 0 var(--color-brand);
-}
-
-/* ICON BOX */
-.iconbox {
-  width: 60px;
-  height: 60px;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  background-color: var(--color-brand);
-  color: var(--color-base);
-}
-
-/* BUTTONS */
-.btn {
-  padding: 12px 28px;
-  font-weight: 700 !important;
-}
-.btn-brand {
-  background-color: var(--color-brand);
-  border: 2px solid var(--color-brand);
-  color: #fff;
-}
-.btn-brand:hover,
-.btn-brand:focus {
-  background-color: var(--color-brand2);
-  border: 2px solid var(--color-brand2);
-  color: #fff;
-}
-
-/* CUSTOM LINKS */
-.custom-link {
-  font-weight: 700;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 12px; /* Sharper corners look more 'tech' */
+  transition: all 0.4s ease;
   position: relative;
+  overflow: hidden;
+  
+  /* 3D Tilt Prep */
+  transform-style: preserve-3d;
+  transform: perspective(1000px);
 }
-.custom-link::after {
+
+.bg-base:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* Subtle glow line on top of cards */
+.bg-base::before {
   content: "";
-  width: 0;
-  height: 2px;
-  background-color: var(--color-brand);
   position: absolute;
-  left: 0;
-  top: 110%;
-  transition: all 0.3s ease;
-}
-.custom-link:hover::after {
-  width: 100%;
+  top: 0; left: 0; width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+  opacity: 0.5;
 }
 
-/* CONTACT FORM */
-#contact .form-control {
-  background-color: var(--color-base);
-  color: var(--color-body);
-  border-color: var(--color-base);
-}
-#contact .form-control:focus {
-  border-color: var(--color-brand);
-  box-shadow: none;
-}
-#contact .form-control::placeholder {
-  color: var(--color-body);
-}
-#contact input.form-control {
-  height: 42px;
+/* SECTION SPECIFIC LAYOUTS */
+
+/* A. Experience & Education: Flex Layout (Side-by-Side) */
+#experience .bg-base, 
+#education .bg-base {
+  display: flex;           
+  align-items: flex-start;
+  gap: 20px;
 }
 
-/* SOCIAL ICONS */
-.social-icons a {
-  width: 40px;
-  height: 40px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 100px;
-  background-color: var(--color-base);
-  color: var(--color-brand);
-  font-size: 24px;
-  transition: 0.3s ease;
-}
-.social-icons a:hover {
-  background-color: var(--color-brand);
-  color: white;
+/* Force logos in Experience/Education to 48px */
+#experience .bg-base img, 
+#education .bg-base img {
+  width: 48px !important;
+  height: 48px !important;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 6px;
 }
 
-/* PROFILE PIC */
-.profilepic {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  border: 4px solid var(--color-brand);
+/* B. Projects: Block Layout (Stacked) */
+/* This overrides the flex rule if it leaks, but targeting via ID above is safer */
+.col-md-6 .bg-base {
+  display: block;
 }
 
-@media (max-width: 422px) {
-  .num {
-    padding-top: 2rem;
-    display: block;
-  }
+/* C. Leadership: Block Layout */
+#other .bg-base {
+  display: block !important;
+  padding: 2rem;
 }
 
-#home h1 {
-  text-transform: none;
-  font-size: 2.6rem;
-  font-weight: 500;
-  font-style: normal;
-  letter-spacing: 0.3px;
-  color: var(--color-heading);
+/* Tech Tags (Skills in Projects) */
+.tech-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(87, 6, 140, 0.2);
+  border: 1px solid rgba(87, 6, 140, 0.4);
+  color: #d8b4fe;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  margin-right: 6px;
+  margin-bottom: 6px;
 }
 
-#home span.text-brand {
-  font-style: normal;
-  font-weight: 600;
-  color: var(--color-brand);
+/* Date Badges */
+.date-badge {
+  color: var(--accent-cyan);
+  font-size: 0.75rem;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
-#home .lead {
-  font-size: 1.2rem;
-  font-weight: 400;
-  font-style: normal;
-  color: #cfd6dd;
-  margin-top: 1rem;
+/* Buttons */
+.btn-brand {
+  background: transparent;
+  color: #fff;
+  border: 1px solid var(--accent-glow);
+  padding: 12px 30px;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
 }
 
-
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.btn-brand::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 0%; height: 100%;
+  background: var(--accent-glow);
+  z-index: -1;
+  transition: 0.3s;
 }
 
-#home h1 {
-  animation: fadeInUp 1.5s ease forwards;
+.btn-brand:hover::after { width: 100%; }
+.btn-brand:hover { border-color: var(--accent-glow); }
+
+.ghost-link {
+  color: var(--text-muted);
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  margin-left: 20px;
+}
+.ghost-link:hover { color: var(--accent-cyan); text-decoration: underline;}
+
+/* Form Inputs */
+.form-control {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border-glass);
+  color: #fff;
+  border-radius: 4px;
+  padding: 14px;
+  font-family: var(--font-code);
+  font-size: 0.9rem;
+}
+.form-control:focus {
+  background: rgba(0,0,0,0.5);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(0, 242, 255, 0.1);
+  color: #fff;
 }
 
-#home .lead {
-  opacity: 0;
-  animation: fadeInUp 1.5s ease forwards;
-  animation-delay: 0.6s;
-}
-
-#home .btn-brand {
-  opacity: 0;
-  animation: fadeInUp 1.5s ease forwards;
-  animation-delay: 1s;
-}
-
-.hero-editorial{
-  min-height: 88vh;
-  display:flex;
-  align-items:center;
-  padding: 90px 0;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  background: radial-gradient(60rem 60rem at 120% -20%, rgba(87,6,140,.10), transparent 60%);
-}
-.hero-editorial .eyebrow{
-  color: var(--color-brand);
-  letter-spacing:.5px;
-  margin:0 0 .6rem 0;
-}
-.hero-editorial .hero-title{
-  font-size: clamp(1.3rem, 2vw + .8rem, 2rem);
-  font-weight: 500;
-  font-style: normal;       /* no italics */
-  line-height: 1.35;
-  margin: 0 0 .8rem 0;
-  color: var(--color-heading);
-}
-.hero-editorial .hero-sub{
-  color:#cfd6dd;
-  max-width: 58ch;
-  margin-bottom: 1.1rem;
-  font-size: 1rem;
-}
-.hero-editorial .hero-links{
-  display:flex;
-  align-items:center;
-  gap:.75rem;
-}
-.ghost-link{
-  padding:10px 18px;
-  border-radius:999px;
-  border:1.5px solid rgba(255,255,255,.5);
-  color:#fff;
-  transition:0.3s;
-}
-.ghost-link:hover{ border-color: var(--color-brand); }
-
-/* --- UNIFORM SKILL ICON GRID --- */
-
+/* -----------------------------------------
+   5. SKILLS GRID FIX
+   ----------------------------------------- */
 .skill-icon {
-  width: 90px; /* fixed container width for consistent grid */
+  width: 90px !important;  /* Fixed width allows them to sit in a row */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   text-align: center;
-  gap: 6px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+/* Ensure the parent container allows wrapping */
+.d-flex.flex-wrap {
+  gap: 1.5rem !important; /* Space between icons */
 }
 
 .skill-icon img {
-  width: 64px;   /* all icons exactly the same size */
-  height: 64px;
-  object-fit: contain; /* keeps proportions, works for PNG & GIF */
-  border-radius: 8px;
-  display: block;
-  background-color: transparent;
-  transition: transform 0.3s ease;
-}
-
-.skill-icon p {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #e8f0f2;
-  margin: 0;
-  text-align: center;
-  width: 100%;
-}
-
-/* hover animations */
-.skill-icon:hover img {
-  transform: scale(1.1);
+  width: 48px !important; /* Standard icon size */
+  height: 48px !important;
+  margin-bottom: 0;
 }
 
 .skill-icon:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: var(--accent-cyan);
   transform: translateY(-5px);
-  box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+}
+
+.skill-icon p {
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* -----------------------------------------
+   6. IMAGES & PROFILE
+   ----------------------------------------- */
+.profilepic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent-glow);
+  margin: 0 auto 1rem auto;
+  display: block;
+}
+
+/* -----------------------------------------
+   7. ANIMATIONS (Glitch)
+   ----------------------------------------- */
+.glitch {
+  position: relative;
+  color: #fff;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  left: 2px;
+  text-shadow: -1px 0 #ff00c1;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  left: -2px;
+  text-shadow: -1px 0 #00fff9;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(30px, 9999px, 10px, 0); }
+  5% { clip: rect(80px, 9999px, 90px, 0); }
+  10% { clip: rect(10px, 9999px, 40px, 0); }
+  15% { clip: rect(0, 0, 0, 0); }
+  100% { clip: rect(0, 0, 0, 0); }
+}
+
+@keyframes glitch-anim2 {
+  0% { clip: rect(0, 0, 0, 0); }
+  20% { clip: rect(20px, 9999px, 60px, 0); }
+  40% { clip: rect(90px, 9999px, 10px, 0); }
+  60% { clip: rect(10px, 9999px, 80px, 0); }
+  100% { clip: rect(0, 0, 0, 0); }
+}
+
+/* -----------------------------------------
+   8. UI UTILITIES
+   ----------------------------------------- */
+/* Scroll Progress Bar */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-glow));
+  width: 0%;
+  z-index: 9999;
+  box-shadow: 0 0 10px var(--accent-cyan);
+}
+
+/* Hide custom cursor elements if present in HTML */
+.cursor-dot, .cursor-outline {
+  display: none !important;
+}
+
+/* -----------------------------------------
+   9. SLIM HUD FOOTER
+   ----------------------------------------- */
+.hud-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 8px 0; /* Very small padding */
+  
+  background: rgba(5, 5, 5, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border-glass);
+  z-index: 2000;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px; /* Space between elements */
+}
+
+/* Icons */
+.footer-socials {
+  display: flex;
+  gap: 15px;
+}
+.footer-socials a {
+  color: var(--text-muted);
+  font-size: 1.2rem; /* Smaller, neat icons */
+  display: flex; /* Centers icon in link */
+}
+.footer-socials a:hover {
+  color: var(--accent-cyan);
+  transform: translateY(-2px);
+}
+
+/* Divider Line */
+.footer-divider {
+  height: 15px;
+  width: 1px;
+  background-color: var(--border-glass);
+}
+
+/* Text */
+.hud-footer p {
+  font-family: var(--font-code);
+  font-size: 0.7rem; /* Small technical text */
+  color: var(--text-muted);
+  margin: 0;
+  letter-spacing: 0.5px;
 }
